@@ -7,7 +7,7 @@ const Signup = () => {
   const [popup, setPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [customer, setCustomer] = useState({
-    name: "",
+    name: "",  
     email: "",
     phone: "",
     role: "",
@@ -23,7 +23,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const response = await api.post("customer/signup", customer);
+      const response = await api.post("/customer/signup", customer);
       console.log(response);
       setPopup(true);
       localStorage.setItem("token", response.data.token);

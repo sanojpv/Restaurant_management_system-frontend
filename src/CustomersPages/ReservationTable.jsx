@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import tablebg from "../assets/resarvationtable.jpg";
+import tablebg from "../assets/resarvationtable.webp";
 import api from "../services/api";
 import Navbar from "../components/Navbar";
 import { CheckCircle, AlertTriangle, X, Loader2 } from "lucide-react"; // Added Loader2 for submission
