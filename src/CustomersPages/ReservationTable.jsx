@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import tablebg from "../assets/resarvationtable.webp";
+import tablebg from "../assets/resarvationtableimg.webp";
 import api from "../services/api";
 import Navbar from "../components/Navbar";
 import { CheckCircle, AlertTriangle, X, Loader2 } from "lucide-react";
@@ -71,7 +71,7 @@ const ReservationPage = () => {
     "w-full border border-gray-300 p-3 rounded-xl focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50 transition duration-200 ease-in-out placeholder-gray-500 text-gray-800 bg-white/70 backdrop-blur-sm";
 
   const buttonClass =
-    "w-full flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition duration-300 ease-in-out disabled:bg-indigo-400 cursor-pointer";
+    "w-full flex items-center justify-center bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 rounded-xl shadow-lg transition duration-300 ease-in-out disabled:bg-indigo-400 cursor-pointer";
 
   return (
     <div>
@@ -98,7 +98,7 @@ const ReservationPage = () => {
           <h2 className="text-4xl sm:text-5xl font-extrabold text-center mb-2 text-white drop-shadow-lg">
             Book Your Table
           </h2>
-          <p className="text-center text-white/90 mb-8 font-light sm:text-lg drop-shadow-md">
+          <p className="text-center text-black mb-8 font-light sm:text-lg drop-shadow-md">
             Reserve your spot for an unforgettable dining experience.
           </p>
 
