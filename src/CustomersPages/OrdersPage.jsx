@@ -98,7 +98,7 @@ const OrderHistoryPage = () => {
         </p>
         <button
           onClick={() => navigate("/menu")}
-          className="mt-6 bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-indigo-700 transition"
+          className="mt-6 bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-yellow-700 transition"
         >
           Start Shopping
         </button>
@@ -111,7 +111,7 @@ const OrderHistoryPage = () => {
     <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
       <div className="w-full max-w-5xl mx-auto">
         <h1 className="text-3xl font-extrabold text-slate-800 mb-8 border-b pb-3 flex items-center gap-3">
-          <History className="w-8 h-8 text-indigo-600" /> Your Order History
+          <History className="w-8 h-8 text-gray-800" /> Your Order History
         </h1>
 
         <div className="space-y-8">
@@ -139,7 +139,7 @@ const OrderHistoryPage = () => {
 
                 {/* Delivery Option */}
                 <div>
-                  <p className="text-sm text-indigo-300">Method</p>
+                  <p className="text-sm text-indigo-300">Delivery Type</p>
                   <div className="flex items-center mt-0.5">
                     {order.deliveryOption === "delivery" ? (
                       <Bike className="w-4 h-4 mr-2 text-green-400" />
@@ -199,7 +199,7 @@ const OrderHistoryPage = () => {
                     </span>
                   </div>
 
-                  {/* Delivery/Pickup Option  */}
+                  {/* Delivery/Pickup Option again for clarity */}
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <MapPin className="w-4 h-4 text-pink-600" />
                     <span className="font-bold text-gray-800">Type:</span>

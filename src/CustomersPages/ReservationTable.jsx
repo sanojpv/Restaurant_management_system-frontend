@@ -1,14 +1,12 @@
+
 import React, { useState } from "react";
 import tablebg from "../assets/resarvationtable.webp";
 import api from "../services/api";
 import Navbar from "../components/Navbar";
-import { CheckCircle, AlertTriangle, X, Loader2 } from "lucide-react"; // Added Loader2 for submission
+import { CheckCircle, AlertTriangle, X, Loader2 } from "lucide-react";
 
 const ReservationPage = () => {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
     date: "",
     time: "",
     partySize: "",
@@ -34,16 +32,8 @@ const ReservationPage = () => {
     setSuccessMessage(null);
     setErrorMessage(null);
 
-    // Basic form validation check before API call
-    if (
-      !form.name ||
-      !form.email ||
-      !form.phone ||
-      !form.date ||
-      !form.time ||
-      !form.partySize
-    ) {
-      setErrorMessage("Please fill out all required fields.");
+    if (!form.date || !form.time || !form.partySize) {
+      setErrorMessage("Please select a date, time, and number of guests.");
       setIsSubmitting(false);
       return;
     }
@@ -51,25 +41,20 @@ const ReservationPage = () => {
     try {
       const res = await api.post("/reservation/create", form);
       console.log("Reservation successful:", res.data);
-     
-        
-        setSuccessMessage(
-          "Your table is booked! A confirmation email will be sent shortly."
-        );
-    
+
+      setSuccessMessage(
+        "Your table is booked! A confirmation email will be sent shortly."
+      );
+
       // Clear form on success
       setForm({
-        name: "",
-        email: "",
-        phone: "",
         date: "",
         time: "",
         partySize: "",
       });
       setTimeout(() => {
-     
-      setSuccessMessage(""); 
-    }, 3000);
+        setSuccessMessage("");
+      }, 3000);
     } catch (err) {
       console.error(err);
       setErrorMessage(
@@ -97,7 +82,6 @@ const ReservationPage = () => {
         className="min-h-screen flex items-center justify-center p-4 sm:p-8 bg-cover bg-center"
         style={{
           backgroundImage: `url(${tablebg})`,
-          // Add a subtle dark overlay to ensure text contrast
           filter: "brightness(0.9)",
         }}
       >
@@ -105,10 +89,10 @@ const ReservationPage = () => {
         <div
           className="w-full max-w-lg md:max-w-xl rounded-3xl p-6 sm:p-10 shadow-2xl transition duration-500"
           style={{
-            backgroundColor: "rgba(255, 255, 255, 0.2)", // More transparent white
-            backdropFilter: "blur(20px) saturate(180%)", // Increased blur for better effect
-            border: "1px solid rgba(255, 255, 255, 0.3)", // Lighter border
-            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)", // Add a subtle inner shadow
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
           }}
         >
           <h2 className="text-4xl sm:text-5xl font-extrabold text-center mb-2 text-white drop-shadow-lg">
@@ -119,33 +103,6 @@ const ReservationPage = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Full Name"
-              required
-              className={inputClass}
-            />
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Email Address"
-              required
-              className={inputClass}
-            />
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              placeholder="Phone Number"
-              required
-              className={inputClass}
-            />
 
             {/* Responsive Date/Time/Party Size Layout */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -163,7 +120,7 @@ const ReservationPage = () => {
                 value={form.time}
                 onChange={handleChange}
                 required
-                className={inputClass + " text-gray-800"} 
+                className={inputClass + " text-gray-800"}
               />
               <input
                 type="number"
@@ -173,9 +130,10 @@ const ReservationPage = () => {
                 min="1"
                 max="12"
                 required
-                placeholder="Guests (1-12)"
+                placeholder="Guests (1-12)" 
                 className={inputClass}
               />
+          
             </div>
 
             <button
