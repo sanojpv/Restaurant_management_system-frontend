@@ -259,7 +259,7 @@ const Home = () => {
               built with sustainably sourced ingredients of the highest quality.
               We prioritize elegance, fresh flavors, and impeccable service.
             </p>
-            <Link to="/about">
+            {/* <Link to="/about">
               <motion.button
                 whileHover={{ scale: 1.02, backgroundColor: "#065f46" }}
                 whileTap={{ scale: 0.98 }}
@@ -267,7 +267,7 @@ const Home = () => {
               >
                 Read More About Us
               </motion.button>
-            </Link>
+            </Link> */}
           </motion.div>
 
           <motion.div
