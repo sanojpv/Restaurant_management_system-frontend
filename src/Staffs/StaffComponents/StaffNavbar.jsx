@@ -1,58 +1,95 @@
-
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Utensils, Home, User, LogOut } from 'lucide-react'; 
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Utensils, User, LogOut, Menu, X } from "lucide-react";
 
 const StaffNavbar = () => {
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Define the staff dashboard path
-  const dashboardPath = "/staff/dashboard"; 
-    // Define the login path
-    const loginPath = "/login"; 
+  const dashboardPath = "/staff/dashboard";
+  const loginPath = "/login";
 
   const handleLogout = () => {
-        //  Clear authentication data from local storage 
-        localStorage.removeItem("token"); 
-        localStorage.removeItem("id"); 
-        localStorage.removeItem("role"); 
-
-        // Redirect the user to the login page
-        navigate(loginPath);
-    };
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
+    localStorage.removeItem("role");
+    navigate(loginPath);
+  };
 
   return (
-    <nav className="bg-emerald-700 shadow-lg sticky top-0 z-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+    <nav className="bg-emerald-700 shadow-lg sticky top-0 z-50 w-full">
+      {/* Full-width container */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
         
-        {/* Restaurant Name/Branding (Left) */}
-        <Link to={dashboardPath} className="flex items-center space-x-2 text-2xl font-extrabold text-white transition duration-150 hover:text-emerald-200">
+        {/* LEFT: Logo / Branding */}
+        <Link
+          to={dashboardPath}
+          className="flex items-center space-x-2 text-xl sm:text-2xl font-extrabold text-white hover:text-emerald-200 transition duration-150"
+        >
           <Utensils className="w-6 h-6" />
-          <span>Fork & Flame,Staff Dashboard</span>
+          <span>Fork & Flame Staff Dashboard</span>
         </Link>
 
-        {/* Navigation Links & Actions (Right) */}
-        <div className='flex space-x-4 items-center'>
+        {/* RIGHT: Buttons (Desktop) */}
+        <div className="hidden md:flex items-center space-x-4">
+          <button
+            onClick={() => navigate("/staffprofile")}
+            className="flex items-center px-3 py-2 text-white rounded-lg font-semibold hover:bg-emerald-600 transition duration-150"
+          >
+            <User className="mr-2 w-5 h-5" />
+            Profile
+          </button>
 
-                    {/* Profile Button */}
-            <button 
-                        onClick={() => navigate("/staffprofile")}
-              className="flex items-center px-3 py-2 text-white rounded-lg font-semibold hover:bg-emerald-600 transition duration-150"
-            >
-                        <User className="mr-2 w-5 h-5"/>
-                        Profile
-                    </button>
+          <button
+            onClick={handleLogout}
+            className="flex items-center px-4 py-2 text-white rounded-lg font-semibold border-2 border-red-400 bg-red-600 hover:bg-red-700 hover:border-red-600 transition duration-150 shadow-md"
+          >
+            <LogOut className="mr-2 w-5 h-5" />
+            Logout
+          </button>
+        </div>
 
-                    {/* Log Out Button */}
-                    <button 
-                        onClick={handleLogout}
-              className="flex items-center px-4 py-2 text-white rounded-lg font-semibold border-2 border-red-400 bg-red-600 hover:bg-red-700 hover:border-red-600 transition duration-150 shadow-md"
-            >
-                        <LogOut className="mr-2 w-5 h-5"/>
-                        Logout
-                    </button>
+        {/* RIGHT: Hamburger Icon (Mobile) */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="text-white focus:outline-none"
+          >
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* MOBILE MENU */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-emerald-800 px-4 py-3 space-y-3 shadow-lg">
+          <button
+            onClick={() => {
+              navigate("/staffprofile");
+              setIsMenuOpen(false);
+            }}
+            className="flex items-center w-full px-3 py-2 text-white rounded-lg font-semibold hover:bg-emerald-600 transition duration-150"
+          >
+            <User className="mr-2 w-5 h-5" />
+            Profile
+          </button>
+
+          <button
+            onClick={() => {
+              handleLogout();
+              setIsMenuOpen(false);
+            }}
+            className="flex items-center w-full px-4 py-2 text-white rounded-lg font-semibold border-2 border-red-400 bg-red-600 hover:bg-red-700 hover:border-red-600 transition duration-150 shadow-md"
+          >
+            <LogOut className="mr-2 w-5 h-5" />
+            Logout
+          </button>
+        </div>
+      )}
     </nav>
   );
 };

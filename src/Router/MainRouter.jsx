@@ -26,6 +26,7 @@ import Admin_Profile from "../Adminpages/AdminProfile";
 import AdminMenuManagement from "../Adminpages/AdminMenuManagement";
 import EditMenu from "../Adminpages/MenuUpdate";
 import CustomerWelcome from "../CustomersPages/CustomerProfileHome";
+import OrderOverview from "../Staffs/StaffPages/OrderOverview";
 
 const MainRouter = () => {
   return (
@@ -88,7 +89,7 @@ const MainRouter = () => {
 
       <Route path="/staffprofile" element={<StaffProfile />} />
       <Route path="/customerreservation" element={<CustomerReservations />} />
-
+        <Route path="/staffoverview" element={<OrderOverview/>} />
       {/* Admin routes */}
       <Route
         path="/admin"

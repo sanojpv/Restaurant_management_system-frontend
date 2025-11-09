@@ -1,31 +1,39 @@
-
 import React, { useEffect, useState, useCallback } from "react";
 import api from "../../services/api";
 import { toast, ToastContainer } from "react-toastify";
-import { Loader2, Utensils, Calendar, AlertTriangle } from "lucide-react";
+import {
+  Loader2,
+  Utensils,
+  Calendar,
+  AlertTriangle,
+  ListChecks,
+} from "lucide-react";
 import StaffNavbar from "../StaffComponents/StaffNavbar";
 import OrderCard from "../StaffPages/SttaffOrderCard";
 import ReservationCard from "../StaffPages/StaffReservationCard";
+import { useNavigate } from "react-router-dom";
 
 const StaffDashboard = () => {
   const [newOrders, setNewOrders] = useState([]);
   const [newReservations, setNewReservations] = useState([]);
   const [loading, setLoading] = useState(true);
-  // State to track loading/action on a specific card (for disabling buttons)
   const [cardLoading, setCardLoading] = useState({ id: null, action: null });
 
-  //  Function to Fetch All Pending Data
+  const navigate = useNavigate();
+
+  const goToOrderOverview = () => {
+    navigate("/staffoverview");
+  };
+
   const fetchDashboardData = useCallback(async () => {
     try {
-      // Fetch New Orders
       const orderRes = await api.get("/staff/orders/new");
-      setNewOrders(orderRes.data.orders || orderRes.data); 
+      setNewOrders(orderRes.data.orders || orderRes.data);
 
-      // Fetch New Reservations
       const resRes = await api.get("/staff/reservations/new");
-      setNewReservations(resRes.data.reservations || resRes.data); 
+      setNewReservations(resRes.data.reservations || resRes.data);
 
-      toast.info("Dashboard data refreshed!", { autoClose: 1000 });
+      // toast.info("Dashboard data refreshed!", { autoClose: 1000 });
     } catch (error) {
       toast.error("Failed to load dashboard data. Check API connection.");
       console.error("Fetch error:", error);
@@ -34,19 +42,9 @@ const StaffDashboard = () => {
     }
   }, []);
 
-  //  Fetch Data on Component Mount and set up Polling (Auto-Refresh)
-  useEffect(() => {
-    fetchDashboardData();
-    // Set up polling to refresh every 30 seconds for real-time updates
-    const interval = setInterval(fetchDashboardData, 30000);
-    return () => clearInterval(interval);
-  }, [fetchDashboardData]);
-
-  // Handles Accepting or Rejecting an Order
   const handleOrderAction = async (orderId, action) => {
-    setCardLoading({ id: orderId, action: action });
+    setCardLoading({ id: orderId, action });
     const endpoint = `/staff/orders/${orderId}/${action}`;
-    // orderId is the MongoDB _id string, so .slice works
     const successMsg = `Order #${orderId.slice(-6)} ${
       action === "accept" ? "accepted!" : "rejected."
     }`;
@@ -55,7 +53,6 @@ const StaffDashboard = () => {
     try {
       await api.put(endpoint);
       toast.success(successMsg);
-      // Filter must use order._id to compare against the handled orderId
       setNewOrders((prev) => prev.filter((order) => order._id !== orderId));
     } catch (error) {
       toast.error(errorMsg);
@@ -65,10 +62,9 @@ const StaffDashboard = () => {
     }
   };
 
-  // Handles Accepting or Declining a Reservation
   const handleReservationAction = async (resId, action) => {
-    setCardLoading({ id: resId, action: action });
-    const endpoint = `/staff/reservations/${resId}/${action}`; 
+    setCardLoading({ id: resId, action });
+    const endpoint = `/staff/reservations/${resId}/${action}`;
     const successMsg = `Reservation #${resId.slice(-6)} ${
       action === "accept" ? "confirmed!" : "declined."
     }`;
@@ -77,7 +73,6 @@ const StaffDashboard = () => {
     try {
       await api.put(endpoint);
       toast.success(successMsg);
-      //  Filter must use res._id to compare against the handled resId
       setNewReservations((prev) => prev.filter((res) => res._id !== resId));
     } catch (error) {
       toast.error(errorMsg);
@@ -87,55 +82,60 @@ const StaffDashboard = () => {
     }
   };
 
-  // Loading State for Initial Fetch
+  useEffect(() => {
+    fetchDashboardData();
+    const interval = setInterval(fetchDashboardData, 30000);
+    return () => clearInterval(interval);
+  }, [fetchDashboardData]);
+
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-slate-50">
+      <div className="flex flex-col justify-center items-center h-screen bg-slate-50 px-4 text-center">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-        <p className="ml-3 text-lg text-gray-600">
+        <p className="mt-3 text-lg text-gray-600">
           Loading live operations data...
         </p>
       </div>
     );
   }
 
-  // Main Dashboard Render
   return (
     <div className="min-h-screen bg-slate-50">
       <StaffNavbar />
-      {/*  position  "top-right"*/}
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      <ToastContainer position="top-right" autoClose={2000} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-8 border-b pb-4">
-          <AlertTriangle className="w-7 h-7 inline-block mr-3 text-red-500" />
-          Pending Tasks Overview
-        </h1>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">
+        {/* Header Section */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 border-b pb-4 space-y-3 sm:space-y-0">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 flex items-center">
+            <AlertTriangle className="w-6 sm:w-7 h-6 sm:h-7 mr-3 text-red-500" />
+            Pending Tasks Overview
+          </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Order Queue Section */}
-          <div className="bg-white p-6 rounded-xl shadow-xl border-t-4 border-blue-600">
-            <h2 className="text-2xl font-bold text-blue-700 mb-6 flex items-center">
-              <Utensils className="mr-3" /> New Orders ({newOrders.length})
+          <button
+            onClick={goToOrderOverview}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-150 shadow-md w-full sm:w-auto justify-center"
+          >
+            <ListChecks className="w-5 h-5 mr-2" />
+            View All Orders
+          </button>
+        </div>
+
+        {/* Main Dashboard Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          {/* Orders Section */}
+          <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xl border-t-4 border-blue-600 flex flex-col h-[calc(100vh-260px)] sm:h-[75vh]">
+            <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4 sm:mb-6 flex items-center">
+              <Utensils className="mr-3" />
+              New Orders ({newOrders.length})
             </h2>
-            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+
+            <div className="space-y-4 overflow-y-auto pr-2 flex-1">
               {newOrders.length > 0 ? (
                 newOrders.map((order) => (
                   <OrderCard
-                    //  Use MongoDB's unique identifier: _id
                     key={order._id}
                     order={order}
-                    // Pass the correct _id to the handler
                     onAccept={() => handleOrderAction(order._id, "accept")}
                     onReject={() => handleOrderAction(order._id, "reject")}
                     isLoading={cardLoading}
@@ -149,20 +149,19 @@ const StaffDashboard = () => {
             </div>
           </div>
 
-          {/* Reservation Requests Section */}
-          <div className="bg-white p-6 rounded-xl shadow-xl border-t-4 border-emerald-600">
-            <h2 className="text-2xl font-bold text-emerald-700 mb-6 flex items-center">
-              <Calendar className="mr-3" /> Pending Reservations (
-              {newReservations.length})
+          {/* Reservations Section */}
+          <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xl border-t-4 border-emerald-600 flex flex-col h-[calc(100vh-260px)] sm:h-[75vh]">
+            <h2 className="text-xl sm:text-2xl font-bold text-emerald-700 mb-4 sm:mb-6 flex items-center">
+              <Calendar className="mr-3" />
+              Pending Reservations ({newReservations.length})
             </h2>
-            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+
+            <div className="space-y-4 overflow-y-auto pr-2 flex-1">
               {newReservations.length > 0 ? (
                 newReservations.map((res) => (
                   <ReservationCard
-                    //  Use MongoDB's unique identifier: _id
                     key={res._id}
                     reservation={res}
-                    // Pass the correct _id to the handler
                     onAccept={() => handleReservationAction(res._id, "accept")}
                     onDecline={() =>
                       handleReservationAction(res._id, "decline")
