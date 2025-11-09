@@ -21,8 +21,8 @@ const StatCard = ({ title, value, icon: Icon, color }) => (
 const StatusBadge = ({ status }) => {
     const baseStyle = "px-3 py-1 text-xs font-semibold rounded-full uppercase";
     
-    switch (status?.toLowerCase()) { // Added optional chaining for safety
-        case "completed":
+    switch (status?.toLowerCase()) { 
+        case "confirmed":
             return <span className={`${baseStyle} bg-green-500/20 text-green-400 ring-1 ring-green-400/30`}>{status}</span>;
         case "pending":
             return <span className={`${baseStyle} bg-yellow-500/20 text-yellow-400 ring-1 ring-yellow-400/30`}>{status}</span>;
@@ -115,7 +115,7 @@ const Dashboard = () => {
       </div>
 
       {/*  Recent Orders Table  */}
-      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-gray-700/50">
+      <div className="bg-gray-800 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-gray-700/50">
         <h2 className="font-bold text-xl text-white mb-5 flex items-center gap-2">
             <Package size={20} className="text-orange-400" />
             Recent Orders ({stats.recentOrders?.length || 0})
@@ -128,9 +128,9 @@ const Dashboard = () => {
             </div>
         ) : (
             <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-700">
+                <table className="min-w-full divide-y divide-emerald-700">
                     {/* Table Header */}
-                    <thead className="bg-gray-700/50">
+                    <thead className="bg-yellow-700">
                         <tr>
                             <th className="p-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider rounded-tl-lg">
                                 Order ID

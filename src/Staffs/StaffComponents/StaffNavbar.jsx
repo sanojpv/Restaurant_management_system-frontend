@@ -28,7 +28,7 @@ const StaffNavbar = () => {
         {/* Restaurant Name/Branding (Left) */}
         <Link to={dashboardPath} className="flex items-center space-x-2 text-2xl font-extrabold text-white transition duration-150 hover:text-emerald-200">
           <Utensils className="w-6 h-6" />
-          <span>Fork & Flame Staff</span>
+          <span>Fork & Flame,Staff Dashboard</span>
         </Link>
 
         {/* Navigation Links & Actions (Right) */}

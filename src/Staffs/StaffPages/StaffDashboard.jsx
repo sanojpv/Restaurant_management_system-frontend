@@ -103,10 +103,10 @@ const StaffDashboard = () => {
   return (
     <div className="min-h-screen bg-slate-50">
       <StaffNavbar />
-      {/*  position from "top-right" to "bottom-center" */}
+      {/*  position  "top-right"*/}
       <ToastContainer
-        position="bottom-center"
-        autoClose={3000}
+        position="top-right"
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
