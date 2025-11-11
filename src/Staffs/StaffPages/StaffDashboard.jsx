@@ -20,22 +20,17 @@ const StaffDashboard = () => {
   const [cardLoading, setCardLoading] = useState({ id: null, action: null });
 
   const navigate = useNavigate();
+  const goToOrderOverview = () => navigate("/staffoverview");
 
-  const goToOrderOverview = () => {
-    navigate("/staffoverview");
-  };
-
+  //  Fetch both new orders and pending reservations
   const fetchDashboardData = useCallback(async () => {
-    if (newOrders.length === 0 && newReservations.length === 0) {
-      setLoading(true);
-    }
-
+    if (newOrders.length === 0 && newReservations.length === 0) setLoading(true);
     try {
       const orderRes = await api.get("/staff/orders/new");
-      setNewOrders(orderRes.data.orders || orderRes.data);
+      setNewOrders(orderRes.data.orders || []);
 
       const resRes = await api.get("/staff/reservations/new");
-      setNewReservations(resRes.data.reservations || resRes.data);
+      setNewReservations(resRes.data.reservations || []);
     } catch (error) {
       console.error("Fetch error:", error);
     } finally {
@@ -43,6 +38,7 @@ const StaffDashboard = () => {
     }
   }, [newOrders.length, newReservations.length]);
 
+  //  Handle order actions (Accept, Deliver, Reject, Cancel)
   const handleOrderAction = async (orderId, action) => {
     setCardLoading({ id: orderId, action });
     const endpoint = `/staff/orders/${orderId}/${action}`;
@@ -51,38 +47,35 @@ const StaffDashboard = () => {
         ? "confirmed!"
         : action === "deliver"
         ? "delivered!"
-        : "rejected."
+        : action === "reject"
+        ? "rejected."
+        : "cancelled."
     }`;
-    const errorMsg = `Error ${action}ing order #${orderId.slice(-6)}.`;
 
     try {
       const res = await api.put(endpoint);
       toast.success(successMsg);
 
       if (action === "accept") {
+        // Update order status but keep it in the list
         setNewOrders((prev) =>
           prev.map((order) =>
             order._id === orderId ? res.data.order : order
           )
         );
-      } else if (
-        action === "reject" ||
-        action === "deliver" ||
-        action === "cancelCod"
-      ) {
+      } else if (action === "deliver" || action === "reject" || action === "cancelCod") {
+        // Remove delivered/rejected/cancelled orders
         setNewOrders((prev) => prev.filter((order) => order._id !== orderId));
       }
     } catch (error) {
-      toast.error(errorMsg);
-      console.error(errorMsg, error);
+      toast.error(`Error ${action}ing order #${orderId.slice(-6)}.`);
+      console.error(error);
     } finally {
       setCardLoading({ id: null, action: null });
     }
   };
 
-  const handleDeliver = (orderId) => handleOrderAction(orderId, "deliver");
-  const handleCancel = (orderId) => handleOrderAction(orderId, "reject");
-
+  //  Handle reservation actions (Accept / Decline)
   const handleReservationAction = async (resId, action) => {
     setCardLoading({ id: resId, action });
     const endpoint = `/staff/reservations/${resId}/${action}`;
@@ -93,7 +86,7 @@ const StaffDashboard = () => {
     try {
       await api.put(endpoint);
       toast.success(successMsg);
-      setNewReservations((prev) => prev.filter((res) => res._id !== resId));
+      setNewReservations((prev) => prev.filter((r) => r._id !== resId));
     } catch (error) {
       toast.error(`Error ${action}ing reservation #${resId.slice(-6)}.`);
       console.error(error);
@@ -102,29 +95,31 @@ const StaffDashboard = () => {
     }
   };
 
+  //  Fetch data every 30 seconds
   useEffect(() => {
     fetchDashboardData();
     const interval = setInterval(fetchDashboardData, 30000);
     return () => clearInterval(interval);
   }, [fetchDashboardData]);
 
+  //  Loading screen
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center h-screen bg-slate-50 px-4 text-center">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-        <p className="mt-3 text-lg text-gray-600">
-          Loading live operations data...
-        </p>
+        <p className="mt-3 text-lg text-gray-600">Loading Staff Dashboard...</p>
       </div>
     );
   }
 
+  // Main Dashboard UI
   return (
     <div className="min-h-screen bg-slate-50">
       <StaffNavbar />
       <ToastContainer position="top-right" autoClose={2000} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">
+        {/*  Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 border-b pb-4 space-y-3 sm:space-y-0">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 flex items-center">
             <AlertTriangle className="w-6 sm:w-7 h-6 sm:h-7 mr-3 text-red-500" />
@@ -140,7 +135,9 @@ const StaffDashboard = () => {
           </button>
         </div>
 
+        {/*  Orders & Reservations */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          {/*  Orders Section */}
           <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xl border-t-4 border-blue-600 flex flex-col">
             <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4 sm:mb-6 flex items-center">
               <Utensils className="mr-3" />
@@ -153,10 +150,10 @@ const StaffDashboard = () => {
                   <OrderCard
                     key={order._id}
                     order={order}
-                    onAccept={handleOrderAction}
-                    onReject={handleOrderAction}
-                    onDeliver={handleDeliver}
-                    onCancel={handleCancel}
+                    onAccept={(id) => handleOrderAction(id, "accept")}
+                    onReject={(id) => handleOrderAction(id, "reject")}
+                    onDeliver={(id) => handleOrderAction(id, "deliver")}
+                    onCancel={(id) => handleOrderAction(id, "cancelCod")}
                     isLoading={cardLoading}
                   />
                 ))
@@ -168,6 +165,7 @@ const StaffDashboard = () => {
             </div>
           </div>
 
+          {/*  Reservations Section */}
           <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xl border-t-4 border-emerald-600 flex flex-col">
             <h2 className="text-xl sm:text-2xl font-bold text-emerald-700 mb-4 sm:mb-6 flex items-center">
               <Calendar className="mr-3" />
@@ -180,9 +178,7 @@ const StaffDashboard = () => {
                   <ReservationCard
                     key={res._id}
                     reservation={res}
-                    onAccept={() =>
-                      handleReservationAction(res._id, "accept")
-                    }
+                    onAccept={() => handleReservationAction(res._id, "accept")}
                     onDecline={() =>
                       handleReservationAction(res._id, "decline")
                     }
