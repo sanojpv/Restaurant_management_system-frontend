@@ -26,34 +26,52 @@ const StaffDashboard = () => {
   };
 
   const fetchDashboardData = useCallback(async () => {
+    if (newOrders.length === 0 && newReservations.length === 0) {
+      setLoading(true);
+    }
+
     try {
       const orderRes = await api.get("/staff/orders/new");
       setNewOrders(orderRes.data.orders || orderRes.data);
 
       const resRes = await api.get("/staff/reservations/new");
       setNewReservations(resRes.data.reservations || resRes.data);
-
-      // toast.info("Dashboard data refreshed!", { autoClose: 1000 });
     } catch (error) {
-      toast.error("Failed to load dashboard data. Check API connection.");
       console.error("Fetch error:", error);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [newOrders.length, newReservations.length]);
 
   const handleOrderAction = async (orderId, action) => {
     setCardLoading({ id: orderId, action });
     const endpoint = `/staff/orders/${orderId}/${action}`;
     const successMsg = `Order #${orderId.slice(-6)} ${
-      action === "accept" ? "accepted!" : "rejected."
+      action === "accept"
+        ? "confirmed!"
+        : action === "deliver"
+        ? "delivered!"
+        : "rejected."
     }`;
     const errorMsg = `Error ${action}ing order #${orderId.slice(-6)}.`;
 
     try {
-      await api.put(endpoint);
+      const res = await api.put(endpoint);
       toast.success(successMsg);
-      setNewOrders((prev) => prev.filter((order) => order._id !== orderId));
+
+      if (action === "accept") {
+        setNewOrders((prev) =>
+          prev.map((order) =>
+            order._id === orderId ? res.data.order : order
+          )
+        );
+      } else if (
+        action === "reject" ||
+        action === "deliver" ||
+        action === "cancelCod"
+      ) {
+        setNewOrders((prev) => prev.filter((order) => order._id !== orderId));
+      }
     } catch (error) {
       toast.error(errorMsg);
       console.error(errorMsg, error);
@@ -62,21 +80,23 @@ const StaffDashboard = () => {
     }
   };
 
+  const handleDeliver = (orderId) => handleOrderAction(orderId, "deliver");
+  const handleCancel = (orderId) => handleOrderAction(orderId, "reject");
+
   const handleReservationAction = async (resId, action) => {
     setCardLoading({ id: resId, action });
     const endpoint = `/staff/reservations/${resId}/${action}`;
     const successMsg = `Reservation #${resId.slice(-6)} ${
       action === "accept" ? "confirmed!" : "declined."
     }`;
-    const errorMsg = `Error ${action}ing reservation #${resId.slice(-6)}.`;
 
     try {
       await api.put(endpoint);
       toast.success(successMsg);
       setNewReservations((prev) => prev.filter((res) => res._id !== resId));
     } catch (error) {
-      toast.error(errorMsg);
-      console.error(errorMsg, error);
+      toast.error(`Error ${action}ing reservation #${resId.slice(-6)}.`);
+      console.error(error);
     } finally {
       setCardLoading({ id: null, action: null });
     }
@@ -105,7 +125,6 @@ const StaffDashboard = () => {
       <ToastContainer position="top-right" autoClose={2000} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">
-        {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 border-b pb-4 space-y-3 sm:space-y-0">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 flex items-center">
             <AlertTriangle className="w-6 sm:w-7 h-6 sm:h-7 mr-3 text-red-500" />
@@ -121,48 +140,49 @@ const StaffDashboard = () => {
           </button>
         </div>
 
-        {/* Main Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-          {/* Orders Section */}
-          <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xl border-t-4 border-blue-600 flex flex-col h-[calc(100vh-260px)] sm:h-[75vh]">
+          <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xl border-t-4 border-blue-600 flex flex-col">
             <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4 sm:mb-6 flex items-center">
               <Utensils className="mr-3" />
-              New Orders ({newOrders.length})
+              New & Confirmed Orders ({newOrders.length})
             </h2>
 
-            <div className="space-y-4 overflow-y-auto pr-2 flex-1">
+            <div className="space-y-4 overflow-y-auto pr-2 max-h-96 lg:max-h-[70vh]">
               {newOrders.length > 0 ? (
                 newOrders.map((order) => (
                   <OrderCard
                     key={order._id}
                     order={order}
-                    onAccept={() => handleOrderAction(order._id, "accept")}
-                    onReject={() => handleOrderAction(order._id, "reject")}
+                    onAccept={handleOrderAction}
+                    onReject={handleOrderAction}
+                    onDeliver={handleDeliver}
+                    onCancel={handleCancel}
                     isLoading={cardLoading}
                   />
                 ))
               ) : (
                 <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 font-medium text-center">
-                  No new orders currently in the queue!
+                  No active orders currently in the queue!
                 </div>
               )}
             </div>
           </div>
 
-          {/* Reservations Section */}
-          <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xl border-t-4 border-emerald-600 flex flex-col h-[calc(100vh-260px)] sm:h-[75vh]">
+          <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xl border-t-4 border-emerald-600 flex flex-col">
             <h2 className="text-xl sm:text-2xl font-bold text-emerald-700 mb-4 sm:mb-6 flex items-center">
               <Calendar className="mr-3" />
               Pending Reservations ({newReservations.length})
             </h2>
 
-            <div className="space-y-4 overflow-y-auto pr-2 flex-1">
+            <div className="space-y-4 overflow-y-auto pr-2 max-h-96 lg:max-h-[70vh]">
               {newReservations.length > 0 ? (
                 newReservations.map((res) => (
                   <ReservationCard
                     key={res._id}
                     reservation={res}
-                    onAccept={() => handleReservationAction(res._id, "accept")}
+                    onAccept={() =>
+                      handleReservationAction(res._id, "accept")
+                    }
                     onDecline={() =>
                       handleReservationAction(res._id, "decline")
                     }

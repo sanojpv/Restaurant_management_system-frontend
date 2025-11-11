@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Utensils, User, LogOut, Menu, X } from "lucide-react";
+import StaffMenu from "../StaffPages/StaffMenuEdit";
 
 const StaffNavbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const dashboardPath = "/staff/dashboard";
+  const dashboardPath = "/staff";
   const loginPath = "/login";
 
   const handleLogout = () => {
@@ -20,11 +21,10 @@ const StaffNavbar = () => {
     <nav className="bg-emerald-700 shadow-lg sticky top-0 z-50 w-full">
       {/* Full-width container */}
       <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
-        
         {/* LEFT: Logo / Branding */}
         <Link
           to={dashboardPath}
-          className="flex items-center space-x-2 text-xl sm:text-2xl font-extrabold text-white hover:text-emerald-200 transition duration-150"
+          className="flex items-center space-x-2 text-xl sm:text-2xl font-extrabold text-white  transition duration-150"
         >
           <Utensils className="w-6 h-6" />
           <span>Fork & Flame Staff Dashboard</span>
@@ -39,6 +39,12 @@ const StaffNavbar = () => {
             <User className="mr-2 w-5 h-5" />
             Profile
           </button>
+          <Link
+            to="/staffmenuedit"
+            className="flex items-center px-3 py-2 text-white rounded-lg font-semibold hover:bg-emerald-600 transition duration-150"
+          >
+            Manage Menu
+          </Link>
 
           <button
             onClick={handleLogout}

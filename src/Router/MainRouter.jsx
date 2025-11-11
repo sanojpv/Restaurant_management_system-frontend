@@ -27,6 +27,7 @@ import AdminMenuManagement from "../Adminpages/AdminMenuManagement";
 import EditMenu from "../Adminpages/MenuUpdate";
 import CustomerWelcome from "../CustomersPages/CustomerProfileHome";
 import OrderOverview from "../Staffs/StaffPages/OrderOverview";
+import StaffMenu from "../Staffs/StaffPages/StaffMenuEdit";
 
 const MainRouter = () => {
   return (
@@ -90,6 +91,7 @@ const MainRouter = () => {
       <Route path="/staffprofile" element={<StaffProfile />} />
       <Route path="/customerreservation" element={<CustomerReservations />} />
         <Route path="/staffoverview" element={<OrderOverview/>} />
+        <Route path="/staffmenuedit" element={<StaffMenu/>} />
       {/* Admin routes */}
       <Route
         path="/admin"

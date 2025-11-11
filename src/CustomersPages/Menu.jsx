@@ -18,12 +18,12 @@ const Menu = () => {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categoryFilter, setCategoryFilter] = useState("all");
-
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
 
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchMenuAndCart = async () => {
       try {
@@ -57,6 +57,7 @@ const Menu = () => {
     };
     fetchMenuAndCart();
   }, []);
+
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, categoryFilter]);
@@ -97,21 +98,17 @@ const Menu = () => {
   };
 
   const filteredMenu = menu.filter((item) => {
-    // category filter
     const categoryMatch =
       categoryFilter === "all" || item.category === categoryFilter;
-
-    //search matching
     const searchMatch =
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.description.toLowerCase().includes(searchTerm.toLowerCase());
-
     return categoryMatch && searchMatch;
   });
 
   const categories = ["all", ...new Set(menu.map((item) => item.category))];
 
-  // pagination logic
+  // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredMenu.slice(indexOfFirstItem, indexOfLastItem);
@@ -135,7 +132,6 @@ const Menu = () => {
             <h2 className="text-3xl md:text-5xl font-extrabold text-gray-800">
               Our Delicious Menu
             </h2>
-            {/*  Emerald Icon */}
             <Utensils className="w-10 h-10 text-emerald-600" />
           </div>
           <p className="mt-2 text-xl text-gray-500 font-light">
@@ -143,7 +139,7 @@ const Menu = () => {
           </p>
         </div>
 
-        {/*  Search Input Bar */}
+        {/* Search Input */}
         <div className="max-w-xl mx-auto mb-10">
           <div className="relative">
             <input
@@ -175,14 +171,11 @@ const Menu = () => {
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => {
-                setCategoryFilter(cat);
-                // currentPage  is 1 deafult
-              }}
+              onClick={() => setCategoryFilter(cat)}
               className={`px-5 py-2 rounded-full font-medium text-sm transition-all duration-300 shadow-md ${
                 categoryFilter === cat
-                  ? "bg-emerald-600 text-white shadow-emerald-400/50" // Active state
-                  : "bg-white text-gray-700 border border-gray-200 hover:bg-emerald-50 hover:border-emerald-300" // Inactive state
+                  ? "bg-emerald-600 text-white shadow-emerald-400/50"
+                  : "bg-white text-gray-700 border border-gray-200 hover:bg-emerald-50 hover:border-emerald-300"
               }`}
             >
               {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -190,6 +183,7 @@ const Menu = () => {
           ))}
         </div>
 
+        {/* Menu Items */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <Loader2 className="w-8 h-8 text-emerald-600 animate-spin mr-2" />
@@ -243,20 +237,31 @@ const Menu = () => {
                           ₹{item.price}
                         </span>
 
+                        {/* Availability Button */}
                         {inCart ? (
                           <button
                             onClick={() => navigate("/cart")}
-                            /* Primary Button*/
                             className="flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold bg-emerald-600 text-white shadow-md hover:bg-emerald-700 transition"
                           >
                             Go to Cart <ArrowRight size={16} />
                           </button>
                         ) : (
                           <button
+                            disabled={!item.isAvailable}
                             onClick={() => handleAddToCart(item._id)}
-                            className="flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold bg-white border border-emerald-500 text-emerald-600 shadow-sm hover:bg-emerald-600 hover:text-white transition"
+                            className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition ${
+                              item.isAvailable
+                                ? "bg-white border border-emerald-500 text-emerald-600 hover:bg-emerald-600 hover:text-white"
+                                : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                            }`}
                           >
-                            <ShoppingCart size={16} /> Add to Cart
+                            {item.isAvailable ? (
+                              <>
+                                <ShoppingCart size={16} /> Add to Cart
+                              </>
+                            ) : (
+                              "Not Available"
+                            )}
                           </button>
                         )}
                       </div>
@@ -266,7 +271,7 @@ const Menu = () => {
               })}
             </div>
 
-            {/* paginations controll */}
+            {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center space-x-2 mt-12">
                 <button
@@ -281,7 +286,6 @@ const Menu = () => {
                   Previous
                 </button>
 
-                {/* show page numbers */}
                 {[...Array(totalPages).keys()].map((number) => (
                   <button
                     key={number + 1}
@@ -321,3 +325,5 @@ const Menu = () => {
 };
 
 export default Menu;
+
+
