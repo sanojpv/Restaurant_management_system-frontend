@@ -44,6 +44,8 @@ const Admin_Profile = () => {
   const handleSave = async (e) => {
     try {
       const admin_id = localStorage.getItem("id");
+      console.log(admin_id);
+      
       const response = await api.put(`/admin/profile/${admin_id}`, {
         name: admin.name,
         email: admin.email,
