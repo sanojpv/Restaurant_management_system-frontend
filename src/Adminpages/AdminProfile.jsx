@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import { toast, ToastContainer } from "react-toastify";
@@ -43,15 +41,13 @@ const Admin_Profile = () => {
     setAdmin({ ...admin, [e.target.name]: e.target.value });
   };
 
- const handleSave = async (e) => {
- 
-  try {
-   const admin_id = localStorage.getItem("id"); 
-   const response = await api.put(`/admin/profile/${admin_id}`, { 
-    name: admin.name,
-    email: admin.email,
-   });
-
+  const handleSave = async (e) => {
+    try {
+      const admin_id = localStorage.getItem("id");
+      const response = await api.put(`/admin/profile/${admin_id}`, {
+        name: admin.name,
+        email: admin.email,
+      });
 
       toast.success(
         <div className="flex items-center">
