@@ -14,7 +14,7 @@ import {
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://restaurant-management-system-1-rnh4.onrender.com"
 
 const getStatusColor = (status) => {
   switch (status.toLowerCase()) {
