@@ -203,7 +203,7 @@ const Menu = () => {
                   >
                     <div className="relative">
                       <img
-                        src={`http://localhost:3000/uploads/${item.image}`}
+                        src={`https://restaurant-management-system-1-rnh4.onrender.com/uploads/${item.image}`}
                         alt={item.name}
                         className="w-full h-52 object-cover"
                       />
