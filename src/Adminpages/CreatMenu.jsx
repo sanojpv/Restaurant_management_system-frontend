@@ -13,29 +13,24 @@ const CreateMenuItem = ({ onAdd}) => {
   const [preview, setPreview] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  // const handleChange = (e) => {
-  //   if (e.target.name === "image") {
-  //     const file = e.target.files[0];
-  //     if (file) {
-  //       setMenuItem({ ...menuItem, image: file });
-  //       setPreview(URL.createObjectURL(file));
-  //     }
-  //   } else {
-  //     setMenuItem((prev) => ({
-  //       ...prev,
-  //       [e.target.name]: e.target.value,
-  //     }));
-  //   }
-  // };
-
-
-
-
-
   const handleChange = (e) => {
-  setMenuItem({ ...menuItem, image: e.target.files[0] });
+    if (e.target.name === "image") {
+      const file = e.target.files[0];
+      if (file) {
+         setMenuItem({ ...menuItem, image: e.target.files[0] });
   setPreview(URL.createObjectURL(e.target.files[0]));
-};
+      }
+    } else {
+      setMenuItem((prev) => ({
+        ...prev,
+        [e.target.name]: e.target.value,
+      }));
+    }
+  };
+
+
+
+
 
 
 
