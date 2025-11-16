@@ -38,9 +38,16 @@ const CreateMenuItem = ({ onAdd}) => {
       formData.append("category", menuItem.category);
       formData.append("image", menuItem.image);
 
-      const response = await api.post("admin/menu/create", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      // const response = await api.post("admin/menu/create", formData, {
+      //   headers: { "Content-Type": "multipart/form-data" },
+      // });
+
+      const response=api.post("/admin/menu/create", formData, {
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Content-Type": "multipart/form-data",
+  },
+});
 
       console.log("Menu Item Created:", response.data);
 
