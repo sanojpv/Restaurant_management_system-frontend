@@ -197,7 +197,7 @@ const AdmiDashboard = () => {
                Creat Menu
               </NavItem>
               <NavItem to="deletemenu" icon={Trash2}>
-               Delete MenuItem
+               Delete & Edit MenuItem
               </NavItem>
             </div>
 
