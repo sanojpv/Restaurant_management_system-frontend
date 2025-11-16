@@ -32,7 +32,7 @@ const CreateMenuItem = ({ onAdd}) => {
 
 
 
-  const handleFileChange = (e) => {
+  const handleChange = (e) => {
   setMenuItem({ ...menuItem, image: e.target.files[0] });
   setPreview(URL.createObjectURL(e.target.files[0]));
 };
