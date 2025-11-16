@@ -13,64 +13,120 @@ const CreateMenuItem = ({ onAdd}) => {
   const [preview, setPreview] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (e) => {
-    if (e.target.name === "image") {
-      const file = e.target.files[0];
-      if (file) {
-        setMenuItem({ ...menuItem, image: file });
-        setPreview(URL.createObjectURL(file));
-      }
-    } else {
-      setMenuItem((prev) => ({
-        ...prev,
-        [e.target.name]: e.target.value,
-      }));
-    }
-  };
+  // const handleChange = (e) => {
+  //   if (e.target.name === "image") {
+  //     const file = e.target.files[0];
+  //     if (file) {
+  //       setMenuItem({ ...menuItem, image: file });
+  //       setPreview(URL.createObjectURL(file));
+  //     }
+  //   } else {
+  //     setMenuItem((prev) => ({
+  //       ...prev,
+  //       [e.target.name]: e.target.value,
+  //     }));
+  //   }
+  // };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("name", menuItem.name);
-      formData.append("description", menuItem.description);
-      formData.append("price", menuItem.price);
-      formData.append("category", menuItem.category);
-      formData.append("image", menuItem.image);
 
-      // const response = await api.post("admin/menu/create", formData, {
-      //   headers: { "Content-Type": "multipart/form-data" },
-      // });
 
-      const response=api.post("/admin/menu/create", formData, {
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-    "Content-Type": "multipart/form-data",
-  },
-});
 
-      console.log("Menu Item Created:", response.data);
 
-      if (onAdd) onAdd(response.data);
+  const handleFileChange = (e) => {
+  setMenuItem({ ...menuItem, image: e.target.files[0] });
+  setPreview(URL.createObjectURL(e.target.files[0]));
+};
 
-      setSuccess(true);
-      setMenuItem({
-        name: "",
-        description: "",
-        price: "",
-        category: "Biriyani",
-        image: "",
-      });
-      setPreview(null);
 
-      setTimeout(() => setSuccess(false), 2000);
-    } catch (error) {
-      console.error(
-        "Error creating menu item:",
-        error.response?.data || error.message
-      );
-    }
-  };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const formData = new FormData();
+    formData.append("name", menuItem.name);
+    formData.append("description", menuItem.description);
+    formData.append("price", menuItem.price);
+    formData.append("category", menuItem.category);
+    formData.append("image", menuItem.image); // MUST be a File object
+
+    const response = await api.post("/admin/menu/create", formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log("Menu Item Created:", response.data);
+
+    if (onAdd) onAdd(response.data);
+
+    setSuccess(true);
+    setMenuItem({
+      name: "",
+      description: "",
+      price: "",
+      category: "Biriyani",
+      image: "",
+    });
+    setPreview(null);
+
+    setTimeout(() => setSuccess(false), 2000);
+
+  } catch (error) {
+    console.error(
+      "Error creating menu item:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+
+
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const formData = new FormData();
+//       formData.append("name", menuItem.name);
+//       formData.append("description", menuItem.description);
+//       formData.append("price", menuItem.price);
+//       formData.append("category", menuItem.category);
+//       formData.append("image", menuItem.image);
+
+//       // const response = await api.post("admin/menu/create", formData, {
+//       //   headers: { "Content-Type": "multipart/form-data" },
+//       // });
+
+//       const response=api.post("/admin/menu/create", formData, {
+//   headers: {
+//     Authorization: `Bearer ${localStorage.getItem("token")}`,
+//     "Content-Type": "multipart/form-data",
+//   },
+// });
+
+//       console.log("Menu Item Created:", response.data);
+
+//       if (onAdd) onAdd(response.data);
+
+//       setSuccess(true);
+//       setMenuItem({
+//         name: "",
+//         description: "",
+//         price: "",
+//         category: "Biriyani",
+//         image: "",
+//       });
+//       setPreview(null);
+
+//       setTimeout(() => setSuccess(false), 2000);
+//     } catch (error) {
+//       console.error(
+//         "Error creating menu item:",
+//         error.response?.data || error.message
+//       );
+//     }
+//   };
 
   return (
     <div className="bg-gradient-to-br from-slate-50 to-slate-100 py-4 px-4 sm:px-6 lg:px-8">
