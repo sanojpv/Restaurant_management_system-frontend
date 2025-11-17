@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
-import api from "../services/api";
+import api from "../services/api.js";
 
-const CreateMenuItem = ({ onAdd}) => {
+const CreateMenuItem = ({ onAdd }) => {
   const [menuItem, setMenuItem] = useState({
     name: "",
     description: "",
@@ -17,8 +16,8 @@ const CreateMenuItem = ({ onAdd}) => {
     if (e.target.name === "image") {
       const file = e.target.files[0];
       if (file) {
-         setMenuItem({ ...menuItem, image: e.target.files[0] });
-  setPreview(URL.createObjectURL(e.target.files[0]));
+        setMenuItem({ ...menuItem, image: e.target.files[0] });
+        setPreview(URL.createObjectURL(e.target.files[0]));
       }
     } else {
       setMenuItem((prev) => ({
@@ -28,100 +27,90 @@ const CreateMenuItem = ({ onAdd}) => {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    try {
+      const formData = new FormData();
+      formData.append("name", menuItem.name);
+      formData.append("description", menuItem.description);
+      formData.append("price", menuItem.price);
+      formData.append("category", menuItem.category);
+      formData.append("image", menuItem.image); // MUST be a File object
 
+      const response = await api.post("/admin/menu/create", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
+      console.log("Menu Item Created:", response.data);
 
+      if (onAdd) onAdd(response.data);
 
+      setSuccess(true);
+      setMenuItem({
+        name: "",
+        description: "",
+        price: "",
+        category: "Biriyani",
+        image: "",
+      });
+      setPreview(null);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+      setTimeout(() => setSuccess(false), 2000);
+    } catch (error) {
+      console.error(
+        "Error creating menu item:",
+        error.response?.data || error.message
+      );
+    }
+  };
 
-  try {
-    const formData = new FormData();
-    formData.append("name", menuItem.name);
-    formData.append("description", menuItem.description);
-    formData.append("price", menuItem.price);
-    formData.append("category", menuItem.category);
-    formData.append("image", menuItem.image); // MUST be a File object
+  //   const handleSubmit = async (e) => {
+  //     e.preventDefault();
+  //     try {
+  //       const formData = new FormData();
+  //       formData.append("name", menuItem.name);
+  //       formData.append("description", menuItem.description);
+  //       formData.append("price", menuItem.price);
+  //       formData.append("category", menuItem.category);
+  //       formData.append("image", menuItem.image);
 
-    const response = await api.post("/admin/menu/create", formData, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+  //       // const response = await api.post("admin/menu/create", formData, {
+  //       //   headers: { "Content-Type": "multipart/form-data" },
+  //       // });
 
-    console.log("Menu Item Created:", response.data);
+  //       const response=api.post("/admin/menu/create", formData, {
+  //   headers: {
+  //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //     "Content-Type": "multipart/form-data",
+  //   },
+  // });
 
-    if (onAdd) onAdd(response.data);
+  //       console.log("Menu Item Created:", response.data);
 
-    setSuccess(true);
-    setMenuItem({
-      name: "",
-      description: "",
-      price: "",
-      category: "Biriyani",
-      image: "",
-    });
-    setPreview(null);
+  //       if (onAdd) onAdd(response.data);
 
-    setTimeout(() => setSuccess(false), 2000);
+  //       setSuccess(true);
+  //       setMenuItem({
+  //         name: "",
+  //         description: "",
+  //         price: "",
+  //         category: "Biriyani",
+  //         image: "",
+  //       });
+  //       setPreview(null);
 
-  } catch (error) {
-    console.error(
-      "Error creating menu item:",
-      error.response?.data || error.message
-    );
-  }
-};
-
-
-
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const formData = new FormData();
-//       formData.append("name", menuItem.name);
-//       formData.append("description", menuItem.description);
-//       formData.append("price", menuItem.price);
-//       formData.append("category", menuItem.category);
-//       formData.append("image", menuItem.image);
-
-//       // const response = await api.post("admin/menu/create", formData, {
-//       //   headers: { "Content-Type": "multipart/form-data" },
-//       // });
-
-//       const response=api.post("/admin/menu/create", formData, {
-//   headers: {
-//     Authorization: `Bearer ${localStorage.getItem("token")}`,
-//     "Content-Type": "multipart/form-data",
-//   },
-// });
-
-//       console.log("Menu Item Created:", response.data);
-
-//       if (onAdd) onAdd(response.data);
-
-//       setSuccess(true);
-//       setMenuItem({
-//         name: "",
-//         description: "",
-//         price: "",
-//         category: "Biriyani",
-//         image: "",
-//       });
-//       setPreview(null);
-
-//       setTimeout(() => setSuccess(false), 2000);
-//     } catch (error) {
-//       console.error(
-//         "Error creating menu item:",
-//         error.response?.data || error.message
-//       );
-//     }
-//   };
+  //       setTimeout(() => setSuccess(false), 2000);
+  //     } catch (error) {
+  //       console.error(
+  //         "Error creating menu item:",
+  //         error.response?.data || error.message
+  //       );
+  //     }
+  //   };
 
   return (
     <div className="bg-gradient-to-br from-slate-50 to-slate-100 py-4 px-4 sm:px-6 lg:px-8">
@@ -143,8 +132,16 @@ const handleSubmit = async (e) => {
               <div className="bg-indigo-50 border-l-4 border-indigo-500 p-3 rounded-r-lg">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    <svg
+                      className="h-5 w-5 text-indigo-500"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <div className="ml-3">
