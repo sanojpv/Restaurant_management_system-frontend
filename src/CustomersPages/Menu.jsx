@@ -203,7 +203,7 @@ const Menu = () => {
                   >
                     <div className="relative">
                       <img
-                        src={"{item.image}"}
+                        src={item.image}
                         alt={item.name}
                         className="w-full h-52 object-cover"
                       />
