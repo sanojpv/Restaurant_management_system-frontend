@@ -28,7 +28,7 @@ const EditMenu = () => {
    try {
     const res = await api.get(`/menu/${id}`);
     setMenuItem(res.data.menuItem); 
-    setPreview(`http://localhost:3000/uploads/${res.data.menuItem.image}`);
+    setPreview(res.data.menuItem.image);
    } catch (err) {
     console.error("Error fetching menu item:", err);
     toast.error("Failed to fetch menu item data");
