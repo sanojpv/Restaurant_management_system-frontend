@@ -226,7 +226,7 @@ const OrderHistoryPage = () => {
                           {cartItem.item.image && (
                             <div className="w-10 h-10 rounded-md overflow-hidden mr-3 flex-shrink-0">
                               <img
-                                src={`${BASE_URL}/uploads/${cartItem.item.image}`}
+                                src={cartItem.item.image}
                                 alt={cartItem.item.name}
                                 className="w-full h-full object-cover"
                               />

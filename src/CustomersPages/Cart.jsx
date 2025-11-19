@@ -149,7 +149,7 @@ const CartPage = () => {
                 >
                   <div className="flex items-center gap-4 w-full sm:w-1/2 md:w-auto flex-grow">
                     <img
-                      src={`http://localhost:3000/uploads/${item.menuItem.image}`}
+                      src={item.menuItem.image}
                       className="w-16 h-16 rounded-full object-cover border-2 border-gray-100 flex-shrink-0"
                       alt={item.menuItem.name}
                     />

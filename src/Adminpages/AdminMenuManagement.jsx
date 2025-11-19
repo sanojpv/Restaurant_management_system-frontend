@@ -98,7 +98,7 @@ const AdminMenuManagement = () => {
                             {/* Image Section (Fixed Size) */}
                             <div className="md:w-1/5 w-full h-48 md:h-auto overflow-hidden flex-shrink-0">
                                 <img
-                                    src={`https://restaurant-management-system-1-rnh4.onrender.com/uploads/${item.image}`}
+                                    src={item.image}
                                     alt={item.name}
                                    
                                     className="w-full h-full object-cover" 
