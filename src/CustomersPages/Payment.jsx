@@ -118,7 +118,7 @@ const PaymentPage = () => {
           key: RAZORPAY_KEY_ID,
           amount: razorpayOrder.amount,
           currency: razorpayOrder.currency,
-          name: "Restaurant Name",
+          name: "FORK & FLAME 🍴",
           description: `Order Payment: ${orderId}`,
           order_id: razorpayOrder.id, // Razorpay's order ID
           handler: async function (response) {
