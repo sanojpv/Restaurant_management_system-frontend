@@ -223,15 +223,19 @@ const OrderHistoryPage = () => {
                       >
                         <div className="flex items-center">
                           {/* Item Image */}
-                          {cartItem.item.image && (
-                            <div className="w-10 h-10 rounded-md overflow-hidden mr-3 flex-shrink-0">
-                              <img
-                                src={cartItem.item.image}
-                                alt={cartItem.item.name}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          )}
+                          {cartItem.item && cartItem.item.image ? (
+  <div className="w-10 h-10 rounded-md overflow-hidden mr-3 flex-shrink-0">
+    <img
+      src={cartItem.item.image}
+      alt={cartItem.item.name}
+      className="w-full h-full object-cover"
+    />
+  </div>
+) : (
+  <div className="w-10 h-10 rounded-md overflow-hidden mr-3 flex-shrink-0 bg-gray-200 text-gray-500 flex items-center justify-center text-xs">
+    No Image
+  </div>
+)}
                           <span className="font-medium text-slate-800">
                             {cartItem.quantity}x{" "}
                             {cartItem.item.name || "Unknown Item"}
