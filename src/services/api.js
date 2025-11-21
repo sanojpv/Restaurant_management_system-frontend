@@ -2,7 +2,6 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://restaurant-management-system-1-rnh4.onrender.com/api",
-  headers: { "Content-Type": "application/json" },
 });
 
 // attaches the Bearer token to every request
