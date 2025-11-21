@@ -186,181 +186,112 @@ const PaymentPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center p-4 sm:p-8">
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-100/50">
-        {/* Header and Summary */}
-        <div className="bg-slate-800 text-white p-6 sm:p-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-extrabold flex items-center gap-3">
-              <CreditCard className="w-7 h-7" /> Finalize Order & Payment
-            </h1>
-            <p className="text-slate-300 mt-1">
-              Select method and payment to complete your order.
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-slate-300 text-sm">Amount Payable</p>
-            <p className="text-4xl font-bold text-yellow-400">
-              {formattedAmount}
-            </p>
-          </div>
+    <div className="min-h-screen bg-gray-100 flex justify-center items-start p-4 pt-20">
+      <Navbar />
+
+      {/* DESKTOP: wide | MOBILE: compact */}
+      <div className="w-full max-w-3xl md:max-w-4xl bg-white rounded-2xl shadow-xl p-6 md:p-10">
+
+        {/* Title */}
+        <h1 className="text-3xl font-bold text-center text-gray-900">
+          Checkout
+        </h1>
+
+        <p className="text-gray-600 text-center mt-1 mb-6">
+          Final step before you enjoy your meal!
+        </p>
+
+        {/* Amount */}
+        <div className="bg-gray-800 text-white text-center rounded-xl p-6 mb-8">
+          <p className="text-sm opacity-80">Total Amount</p>
+          <p className="text-4xl font-extrabold">{formattedAmount}</p>
         </div>
 
-        <div className="p-6 sm:p-10">
-          {/* --- DELIVERY / PICKUP OPTION --- */}
-          <h2 className="text-xl font-bold text-slate-800 mb-6 border-b pb-2">
-            1. Select Order Method
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            {/* Option: Delivery */}
-            <div
-              onClick={() => setDeliveryOption("delivery")}
-              className={`p-6 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+        {/* Delivery / Pickup */}
+        <p className="font-semibold text-gray-800 mb-2">Order Method</p>
+
+        <div className="flex gap-3 mb-7">
+          <button
+            onClick={() => setDeliveryOption("delivery")}
+            className={`flex-1 py-2 rounded-lg text-sm border flex items-center justify-center gap-2
+              ${
                 deliveryOption === "delivery"
-                  ? "border-indigo-600 shadow-lg bg-indigo-50/50"
-                  : "border-gray-200 hover:border-indigo-400 hover:shadow-md"
+                  ? "bg-gray-900 text-white"
+                  : "bg-gray-100 text-gray-700 border-gray-300"
               }`}
-            >
-              <div className="flex items-start">
-                <Bike className="w-7 h-7 text-indigo-600 mr-4 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="text-xl font-semibold text-slate-800 flex items-center">
-                    Home Delivery
-                    {deliveryOption === "delivery" && (
-                      <span className="ml-3 text-xs font-bold text-indigo-700 bg-indigo-200 px-2 py-0.5 rounded-full">
-                        SELECTED
-                      </span>
-                    )}
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Get your food delivered to your address.
-                  </p>
-                </div>
-              </div>
-            </div>
+          >
+            <Bike size={16} /> Delivery
+          </button>
 
-            {/* Option: Pick Up */}
-            <div
-              onClick={() => setDeliveryOption("pickup")}
-              className={`p-6 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+          <button
+            onClick={() => setDeliveryOption("pickup")}
+            className={`flex-1 py-2 rounded-lg text-sm border flex items-center justify-center gap-2
+              ${
                 deliveryOption === "pickup"
-                  ? "border-indigo-600 shadow-lg bg-indigo-50/50"
-                  : "border-gray-200 hover:border-indigo-400 hover:shadow-md"
+                  ? "bg-gray-900 text-white"
+                  : "bg-gray-100 text-gray-700 border-gray-300"
               }`}
-            >
-              <div className="flex items-start">
-                <Store className="w-7 h-7 text-indigo-600 mr-4 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="text-xl font-semibold text-slate-800 flex items-center">
-                    Restaurant Pick Up
-                    {deliveryOption === "pickup" && (
-                      <span className="ml-3 text-xs font-bold text-indigo-700 bg-indigo-200 px-2 py-0.5 rounded-full">
-                        SELECTED
-                      </span>
-                    )}
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Collect your food directly from the restaurant.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          >
+            <Store size={16} /> Pickup
+          </button>
+        </div>
 
-          {/* --- PAYMENT OPTION --- */}
-          <h2 className="text-xl font-bold text-slate-800 mb-6 border-b pb-2">
-            2. Choose Payment Option
-          </h2>
+        {/* Payment */}
+        <p className="font-semibold text-gray-800 mb-2">Payment Method</p>
 
-          {/* Payment Options Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/*  Cash on Delivery (COD) */}
-            <div
-              onClick={() => setSelectedOption("cod")}
-              className={`p-6 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+        <div className="flex flex-col md:flex-row gap-4 mb-10">
+
+          {/* COD – big on desktop */}
+          <button
+            onClick={() => setSelectedOption("cod")}
+            className={`flex-1 py-3 md:py-5 rounded-lg text-sm md:text-lg border flex items-center justify-center gap-3
+              ${
                 selectedOption === "cod"
-                  ? "border-indigo-600 shadow-lg bg-indigo-50/50"
-                  : "border-gray-200 hover:border-indigo-400 hover:shadow-md"
+                  ? "bg-green-600 text-white border-green-600"
+                  : "bg-gray-100 text-gray-700 border-gray-300"
               }`}
-            >
-              <div className="flex items-start">
-                <Truck className="w-7 h-7 text-indigo-600 mr-4 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="text-xl font-semibold text-slate-800 flex items-center">
-                    Cash on Delivery (COD)
-                    {selectedOption === "cod" && (
-                      <span className="ml-3 text-xs font-bold text-indigo-700 bg-indigo-200 px-2 py-0.5 rounded-full">
-                        SELECTED
-                      </span>
-                    )}
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Pay with cash or UPI at the time of delivery/pickup.
-                  </p>
-                </div>
-              </div>
-            </div>
+          >
+            <HandPlatter size={20} /> Cash on Delivery
+          </button>
 
-            {/*Online Payment (Razorpay) */}
-            <div
-              onClick={() => setSelectedOption("online")}
-              className={`p-6 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
+          {/* Online – big on desktop */}
+          <button
+            onClick={() => setSelectedOption("online")}
+            className={`flex-1 py-3 md:py-5 rounded-lg text-sm md:text-lg border flex items-center justify-center gap-3
+              ${
                 selectedOption === "online"
-                  ? "border-indigo-600 shadow-lg bg-indigo-50/50"
-                  : "border-gray-200 hover:border-indigo-400 hover:shadow-md"
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-gray-100 text-gray-700 border-gray-300"
               }`}
-            >
-              <div className="flex items-start">
-                <DollarSign className="w-7 h-7 text-indigo-600 mr-4 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="text-xl font-semibold text-slate-800 flex items-center">
-                    Online Payment (Razorpay)
-                    {selectedOption === "online" && (
-                      <span className="ml-3 text-xs font-bold text-indigo-700 bg-indigo-200 px-2 py-0.5 rounded-full">
-                        SELECTED
-                      </span>
-                    )}
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Pay instantly using Credit Card, Debit Card, UPI, or Net
-                    Banking.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          >
+            <CreditCard size={20} /> Online Payment
+          </button>
+        </div>
 
-          {/* Action Footer */}
-          <div className="mt-10 pt-6 border-t border-gray-100 flex justify-between items-center">
-            <button
-              onClick={() => navigate(-1)}
-              className="flex items-center text-slate-600 hover:text-slate-800 transition duration-150 font-medium"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" /> Back to Cart
-            </button>
+        
+        <div className="flex justify-between items-center">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-gray-600 hover:text-black flex items-center gap-1 text-sm"
+          >
+            <ArrowLeft size={14} /> Back
+          </button>
 
-            <button
-              onClick={handleProceed}
-              disabled={!selectedOption || loading || !deliveryOption}
-              className={`flex items-center gap-2 px-8 py-3 rounded-lg font-semibold shadow-lg transition-all duration-300 
-                                ${
-                                  !selectedOption || loading || !deliveryOption
-                                    ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                                    : "bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-xl"
-                                }`}
-            >
-              {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-              {!selectedOption || !deliveryOption
-                ? "Select Options to Proceed"
-                : selectedOption === "cod"
-                ? "Confirm COD Order"
-                : "Proceed to Razorpay"}
-            </button>
-          </div>
+          <button
+            onClick={handleProceed}
+            disabled={!selectedOption || loading}
+            className={`px-6 py-3 rounded-lg font-semibold text-sm
+              ${
+                !selectedOption || loading
+                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                  : "bg-emerald-600 text-white cursor-pointer"
+              }`}
+          >
+            {loading ? "Processing..." : "Place Order"}
+          </button>
         </div>
       </div>
     </div>
   );
 };
-
 export default PaymentPage;
