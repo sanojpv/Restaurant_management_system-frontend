@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import api from "../services/api";
-
+import Navbar from "../components/Navbar";
 const RAZORPAY_KEY_ID = "rzp_test_RaXdo73QgrRBkB";
 const PaymentPage = () => {
   const [selectedOption, setSelectedOption] = useState(null);
