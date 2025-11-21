@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
   CreditCard,
-  Truck,
-  DollarSign,
+
+ 
   Loader2,
   ArrowLeft,
   Store,
   Bike,
+  HandPlatter,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import api from "../services/api";
