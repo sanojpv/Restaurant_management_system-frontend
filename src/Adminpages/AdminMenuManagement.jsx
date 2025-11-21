@@ -4,13 +4,13 @@ import api from '../services/api'
 import { Trash2, Edit, Utensils, Loader2, PlusCircle } from 'lucide-react'; 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const AdminMenuManagement = () => {
     const [menuItems, setMenuItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-
+const location= useLocation()
     // fetch MenuItems
     const fetchMenuItems = async () => {
         setLoading(true);
@@ -29,7 +29,7 @@ const AdminMenuManagement = () => {
 
     useEffect(() => {
         fetchMenuItems();
-    }, []);
+    }, [location]);
 
     
     const handleDeleteMenuItem = async (menuItemId, itemName) => {
