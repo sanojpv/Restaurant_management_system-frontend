@@ -29,8 +29,13 @@ const EditMenu = () => {
     const res = await api.get(`/menu/${id}`);
     // setMenuItem(res.data.menuItem); 
     // setPreview(res.data.menuItem.image);
-    setMenuItem(res.data);
-setPreview(res.data.image);
+  setMenuItem(res.data.menuItem);
+
+    setPreview(
+      res.data.menuItem.image?.startsWith("http")
+        ? res.data.menuItem.image
+        : `https://restaurant-management-system-1-rnh4.onrender.com/uploads/${res.data.menuItem.image}`
+    );
 
    } catch (err) {
     console.error("Error fetching menu item:", err);
