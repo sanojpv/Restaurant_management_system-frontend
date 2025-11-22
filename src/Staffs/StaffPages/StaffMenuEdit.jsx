@@ -85,7 +85,7 @@ const StaffMenu = () => {
                 {/* IMAGE */}
                 <div className="relative w-full h-48 sm:h-52 md:h-56">
                   <img
-                    src={`http://localhost:3000/uploads/${item.image}`}
+                    src={item.image}
                     alt={item.name}
                     className="w-full h-full object-cover"
                     onError={(e) => {

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   CreditCard,
-
- 
   Loader2,
   ArrowLeft,
   Store,
@@ -192,7 +190,6 @@ const PaymentPage = () => {
 
       {/* DESKTOP: wide | MOBILE: compact */}
       <div className="w-full max-w-3xl md:max-w-4xl bg-white rounded-2xl shadow-xl p-6 md:p-10">
-
         {/* Title */}
         <h1 className="text-3xl font-bold text-center text-gray-900">
           Checkout
@@ -241,7 +238,6 @@ const PaymentPage = () => {
         <p className="font-semibold text-gray-800 mb-2">Payment Method</p>
 
         <div className="flex flex-col md:flex-row gap-4 mb-10">
-
           {/* COD – big on desktop */}
           <button
             onClick={() => setSelectedOption("cod")}
@@ -269,7 +265,6 @@ const PaymentPage = () => {
           </button>
         </div>
 
-        
         <div className="flex justify-between items-center">
           <button
             onClick={() => navigate(-1)}
