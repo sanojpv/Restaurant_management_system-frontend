@@ -148,7 +148,8 @@ const EditMenu = () => {
           className="w-full border-2 border-slate-300 p-3 rounded-lg bg-white focus:border-blue-500 focus:ring-blue-500 transition duration-200 outline-none hover:border-slate-400"
           required
         >
-          <option value="">Select Category</option>
+         
+          <option value="Biriyani">Biriyani</option>
           <option value="Arabic">Arabic</option>
           <option value="Chinese">Chinese</option>
           <option value="Bevarages">Bevarages</option>
