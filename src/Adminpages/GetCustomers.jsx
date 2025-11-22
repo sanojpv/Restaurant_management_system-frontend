@@ -51,7 +51,7 @@ const GetCustomers = () => {
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <Users className="w-8 h-8 text-indigo-600" />
+            <Users className="w-8 h-8 text-gray-800" />
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
               Customer Directory
             </h1>
@@ -70,13 +70,13 @@ const GetCustomers = () => {
               placeholder="Search customers..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full pl-12 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
             />
           </div>
-          <button className="flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm sm:text-base">
+          {/* <button className="flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm sm:text-base">
             <Filter className="w-5 h-5" />
             Filters
-          </button>
+          </button> */}
         </div>
 
         {/* Customer List */}
@@ -99,7 +99,7 @@ const GetCustomers = () => {
                 {/* Desktop Layout */}
                 <div className="hidden sm:grid grid-cols-3 md:grid-cols-5 gap-4 items-center px-4 sm:px-6 py-4">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-indigo-600 shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-blue-600 shrink-0">
                       {customer.name?.charAt(0).toUpperCase()}
                     </div>
                     <span className="font-medium text-gray-800 truncate">
@@ -108,7 +108,7 @@ const GetCustomers = () => {
                   </div>
 
                   <span className="col-span-1 md:col-span-2 text-gray-600 truncate flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-indigo-500 shrink-0" />
+                    <Mail className="w-4 h-4 text-black shrink-0" />
                     {customer.email}
                   </span>
 
@@ -122,13 +122,13 @@ const GetCustomers = () => {
                 {/* Mobile Layout */}
                 <div className="sm:hidden p-4 flex flex-col gap-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-indigo-600">
+                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-blue-600">
                       {customer.name?.charAt(0).toUpperCase()}
                     </div>
                     <div>
                       <p className="font-medium text-gray-800">{customer.name}</p>
                       <p className="text-gray-500 text-sm flex items-center gap-2">
-                        <Mail className="w-4 h-4 text-indigo-400" />
+                        <Mail className="w-4 h-4 text-black" />
                         {customer.email}
                       </p>
                     </div>
