@@ -179,6 +179,7 @@ const CreateMenuItem = ({ onAdd }) => {
                   <option value="Arabic">Arabic</option>
                   <option value="Chinese">Chinese</option>
                   <option value="Beverages">Beverages</option>
+                  
                   <option value="Desert">Dersert</option>
                 </select>
               </div>

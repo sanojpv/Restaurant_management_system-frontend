@@ -153,7 +153,8 @@ const EditMenu = () => {
           <option value="Arabic">Arabic</option>
           <option value="Chinese">Chinese</option>
           <option value="Bevarages">Bevarages</option>
-          <option value="Veg">Veg</option>
+         
+          <option value="Desert">Desert</option>
         </select>
       </div>
      </div>
